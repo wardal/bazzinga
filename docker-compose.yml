@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        - REQUIREMENTS_FILE=${PIP_REQUIREMENTS:-requirements/base.txt}
+    restart: "no"
+    env_file: .env
+    ports:
+      - 8000:8000
+    command: python manage.py runserver 0.0.0.0:8000
+    networks:
+      - local
+    depends_on:
+      - db
+
+  db:
+    image: postgres:11
+    restart: "no"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-bazinga}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-bazinga}
+      - POSTGRES_DB=${POSTGRES_DATABASE:-bazinga}
+    volumes:
+      - bazinga_database:/var/lib/postgresql/data
+    networks:
+      local:
+        aliases:
+        - database
+
+networks:
+  local:
+
+volumes:
+  bazinga_database:

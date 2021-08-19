@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  web:
+    restart: "no"
+    volumes:
+      - .:/opt/app/bazinga
+
+  db:
+    restart: "no"
